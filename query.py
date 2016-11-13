@@ -1,14 +1,23 @@
 import twitter
-from credentials import consumer_key, consumer_secret, access_token_key, access_token_secret
+from credentials import consumer_key, consumer_secret, access_key, access_secret
 
-api = twitter.Api(consumer_key=consumer_key,
-                  consumer_secret=consumer_secret,
-                  access_token_key=access_token_key,
-                  access_token_secret=access_token_secret)
+api= twitter.Twitter(
+		        auth = twitter.OAuth(access_key, access_secret, consumer_key, consumer_secret))
 
-# results = api.GetSearch(
-#     raw_query="q=webdev&src=typd")
+#-----------------------------------------------------------------------
+# perform a basic search 
+# Twitter API docs:
+# https://dev.twitter.com/docs/api/1/get/search
+#-----------------------------------------------------------------------
+query = api.search.tweets(q = "webdev")
 
-results = api.PostUpdate('test')
+#-----------------------------------------------------------------------
+# How long did this query take?
+#-----------------------------------------------------------------------
+print "Search complete (%.3f seconds)" % (query["search_metadata"]["completed_in"])
 
-print results
+#-----------------------------------------------------------------------
+# Loop through each of the results, and print its content.
+#-----------------------------------------------------------------------
+for result in query["statuses"]:
+	print "(%s) @%s %s" % (result["created_at"], result["user"]["screen_name"], result["text"])
