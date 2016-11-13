@@ -9,22 +9,13 @@ api= twitter.Twitter(auth = auth)
 LIST_NAME = 'abc'
 SCREEN_NAME = 'newsstreamapp'
 
-def get_users(topic):
+def get_user_ids(topic):
 	results = api.users.search(q = topic)
 	IDs = [ user["id_str"] for user in results ]
-	return IDs
-
-def content_stream(topic):
-	stream = twitter.TwitterStream(auth = auth, secure = True)
-	ids = ','.join(get_users(topic))
-	tweet_iter = stream.statuses.filter(follow = ids)
-	for tweet in tweet_iter:
-		pprint(tweet)
+	return ','.join(IDs)
 
 def create_list():
-	name= LIST_NAME # WIP
-	result = api.lists.create(name=name)
-	pprint(result)
+	result = api.lists.create(name=LIST_NAME)
 
 def add_users(users):
 	api.lists.members.create_all(
@@ -38,12 +29,17 @@ def post_something():
 	results = api.statuses.update(status = new_status)
 	print "updated status: %s" % new_status
 
+def update_list(topic):
+	api.lists.destroy(slug=LIST_NAME, owner_screen_name=SCREEN_NAME)
+	create_list()
+	add_users(get_user_ids(topic))
 
+
+update_list("heavy-metal")
 
 
 # https://dev.twitter.com/rest/reference/post/lists/create 	
-
-add_users(','.join(get_users('webdev')))
+#add_users(get_user_ids('webdev'))
 
 	
 
