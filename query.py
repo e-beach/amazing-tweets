@@ -5,6 +5,10 @@ from credentials import consumer_key, consumer_secret, access_key, access_secret
 auth = twitter.OAuth(access_key, access_secret, consumer_key, consumer_secret)
 api= twitter.Twitter(auth = auth)
 
+
+LIST_NAME = 'abc'
+SCREEN_NAME = 'newsstreamapp'
+
 def get_users(topic):
 	results = api.users.search(q = topic)
 	IDs = [ user["id_str"] for user in results ]
@@ -18,20 +22,28 @@ def content_stream(topic):
 		pprint(tweet)
 
 def create_list():
-	name= "test" # WIP
+	name= LIST_NAME # WIP
 	result = api.lists.create(name=name)
 	pprint(result)
+
+def add_users(users):
+	api.lists.members.create_all(
+		slug=LIST_NAME,
+		owner_screen_name=SCREEN_NAME,
+		user_id=users
+	)
 
 def post_something():
 	new_status = "testing testing"
 	results = api.statuses.update(status = new_status)
 	print "updated status: %s" % new_status
 
-# https://dev.twitter.com/rest/reference/post/lists/create
-# 	
 
 
-create_list()
+
+# https://dev.twitter.com/rest/reference/post/lists/create 	
+
+add_users(','.join(get_users('webdev')))
 
 	
 
