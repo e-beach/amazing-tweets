@@ -1,21 +1,24 @@
 import os
 from pprint import pprint
-from flask import Flask, send_file, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for
+from forms import RegistrationForm
 from query import update_list
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=['POST', 'GET'])
 def hello():
-	print "GET"
-	return send_file("index.html")
+	form = RegistrationForm(request.form)
+	if request.method == 'POST' and form.validate():
+		return "SUCCESS %s" % form.username.data
+	return render_template("index.html", form=form)
 
-@app.route("/search", methods=['POST'] )
-def update_content():
-	print "POST /search"
-	pprint(request)
-	topic = request.form['topic']
-	update_list(topic)
-	return redirect(url_for(hello))
+# @app.route("/search", methods=['POST'] )
+# def update_content():
+# 	print "POST /search"
+# 	form = RegistrationForm(request.form)
+# 	topic = request.form['topic']
+# 	update_list(topic)
+# 	return redirect(url_for(hello))
 
 
 if __name__ == "__main__":
