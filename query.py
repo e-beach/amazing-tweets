@@ -34,8 +34,8 @@ def update_list(topic):
 	create_list()
 	add_users(get_user_ids(topic))
 
-
-update_list("heavy-metal")
+if __name__ == "__main__":
+	update_list("heavy-metal")
 
 
 # https://dev.twitter.com/rest/reference/post/lists/create 	
