@@ -1,5 +1,6 @@
 from pprint import pprint
 import twitter
+import urllib
 from credentials import consumer_key, consumer_secret, access_key, access_secret
 
 auth = twitter.OAuth(access_key, access_secret, consumer_key, consumer_secret)
@@ -10,6 +11,7 @@ LIST_NAME = 'abc'
 SCREEN_NAME = 'newsstreamapp'
 
 def get_user_ids(topic):
+	topic = urllib.quote_plus(topic)
 	results = api.users.search(q = topic)
 	IDs = [ user["id_str"] for user in results ]
 	return ','.join(IDs)
