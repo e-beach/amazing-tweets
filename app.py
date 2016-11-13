@@ -1,16 +1,21 @@
 import os
-from flask import Flask, send_file
+from pprint import pprint
+from flask import Flask, send_file, request, redirect, url_for
 from query import update_list
 app = Flask(__name__)
 
 @app.route("/")
 def hello():
-    return send_file("index.html")
+	print "GET"
+	return send_file("index.html")
 
-@app.route("/<path:path>")
-def update_content(path):
-	update_list(path)
-	return path
+@app.route("/search", methods=['POST'] )
+def update_content():
+	print "POST /search"
+	pprint(request)
+	topic = request.form['topic']
+	update_list(topic)
+	return redirect(url_for(hello))
 
 
 if __name__ == "__main__":
