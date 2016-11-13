@@ -9,16 +9,17 @@ app = Flask(__name__)
 def hello():
 	form = RegistrationForm(request.form)
 	if request.method == 'POST' and form.validate():
-		return "SUCCESS %s" % form.username.data
+		topic = form.username.data
+ 		update_list(topic)
 	return render_template("index.html", form=form)
 
 # @app.route("/search", methods=['POST'] )
 # def update_content():
 # 	print "POST /search"
 # 	form = RegistrationForm(request.form)
-# 	topic = request.form['topic']
-# 	update_list(topic)
-# 	return redirect(url_for(hello))
+	topic = request.form['topic']
+ 	update_list(topic)
+ 	return redirect(url_for(hello))
 
 
 if __name__ == "__main__":
