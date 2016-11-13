@@ -9,7 +9,7 @@ app = Flask(__name__)
 def hello():
 	form = RegistrationForm(request.form)
 	if request.method == 'POST' and form.validate():
-		topic = form.username.data
+		topic = form.topic.data
  		update_list(topic)
 	return render_template("index.html", form=form)
 
