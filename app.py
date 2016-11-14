@@ -13,15 +13,6 @@ def hello():
  		update_list(topic)
 	return render_template("index.html", form=form)
 
-# @app.route("/search", methods=['POST'] )
-# def update_content():
-# 	print "POST /search"
-# 	form = RegistrationForm(request.form)
-	topic = request.form['topic']
- 	update_list(topic)
- 	return redirect(url_for(hello))
-
-
 if __name__ == "__main__":
 	# Bind to PORT if defined, otherwise default to 5000.
     port = int(os.environ.get('PORT', 5000))
