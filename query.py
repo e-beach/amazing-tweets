@@ -7,7 +7,7 @@ auth = twitter.OAuth(access_key, access_secret, consumer_key, consumer_secret)
 api= twitter.Twitter(auth = auth)
 
 
-LIST_NAME = 'abc'
+LIST_NAME = 'content'
 SCREEN_NAME = 'newsstreamapp'
 
 def get_user_ids(topic):
@@ -32,9 +32,21 @@ def post_something():
 	print "updated status: %s" % new_status
 
 def update_list(topic):
-	api.lists.destroy(slug=LIST_NAME, owner_screen_name=SCREEN_NAME)
+	try:
+		api.lists.destroy(slug=LIST_NAME, owner_screen_name=SCREEN_NAME)
+	except twitter.TwitterHTTPError:
+		# The list did not exist.
+		pass
 	create_list()
-	add_users(get_user_ids(topic))
+	def try_to_add():
+		try:
+			add_users(get_user_ids(topic))
+		except twitter.TwitterHTTPError:
+			# Why? We don't know.
+			sleep(1)
+			try_to_add()
+	try_to_add()
+
 
 if __name__ == "__main__":
 	update_list("heavy-metal")
